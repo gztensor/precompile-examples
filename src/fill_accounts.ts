@@ -33,7 +33,7 @@ async function main() {
     const ss58mirror = convertH160ToSS58(addresses[i].address);
     const transfer = api.tx.balances.transferKeepAlive(
       ss58mirror,
-      amount1TAO.multipliedBy(1000).toString()
+      amount1TAO.multipliedBy(10000).toString()
     );
     await sendTransaction(api, transfer, alice);
   }
