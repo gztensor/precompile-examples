@@ -3,19 +3,19 @@ pragma solidity ^0.8.0;
 address constant ISUBNET_ADDRESS = 0x0000000000000000000000000000000000000803;
 
 interface ISubnet {
-    /// Registers a new network without specifying details.
-    function registerNetwork(bytes32 hotkey) external payable;
-    // /// Registers a new network with specified subnet name, GitHub repository, and contact information.
-    // function registerNetwork(
-    //     bytes32 hotkey,
-    //     string memory subnetName,
-    //     string memory githubRepo,
-    //     string memory subnetContact,
-    //     string memory subnetUrl,
-    //     string memory discord,
-    //     string memory description,
-    //     string memory additional
-    // ) external payable;
+    // /// Registers a new network without specifying details.
+    // function registerNetwork(bytes32 hotkey) external payable;
+    /// Registers a new network with specified subnet name, GitHub repository, and contact information.
+    function registerNetwork(
+        bytes32 hotkey,
+        string memory subnetName,
+        string memory githubRepo,
+        string memory subnetContact,
+        string memory subnetUrl,
+        string memory discord,
+        string memory description,
+        string memory additional
+    ) external payable;
 
     function getServingRateLimit(uint16 netuid) external view returns (uint64);
 

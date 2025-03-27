@@ -47,11 +47,30 @@ contract SubnetManager {
     }
 
     // Registrator-only method to register a network
-    function createSubnet(bytes32 hotkey) external onlyRegistrator() {
+    function createSubnet(
+        bytes32 hotkey,
+        string memory subnetName,
+        string memory githubRepo,
+        string memory subnetContact,
+        string memory subnetUrl,
+        string memory discord,
+        string memory description,
+        string memory additional
+    ) external onlyRegistrator() {
         require(subnetOwnerHotkey == 0, "Already registered");
         subnetOwnerHotkey = hotkey;
         (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
-            abi.encodeWithSelector(subnet.registerNetwork.selector, hotkey)
+            abi.encodeWithSelector(
+                subnet.registerNetwork.selector,
+                hotkey,
+                subnetName,
+                githubRepo,
+                subnetContact,
+                subnetUrl,
+                discord,
+                description,
+                additional
+            )
         );
         require(success, "Subnet creation call failed");
     }
@@ -80,6 +99,156 @@ contract SubnetManager {
             abi.encodeWithSelector(subnet.setKappa.selector, netuid, kappa)
         );
         require(success, "SetKappa call failed");
+    }
+
+    function setServingRateLimit(uint64 servingRateLimit) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setServingRateLimit.selector, netuid, servingRateLimit)
+        );
+        require(success, "setServingRateLimit call failed");
+    }
+
+    function setMinDifficulty(uint64 minDifficulty) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMinDifficulty.selector, netuid, minDifficulty)
+        );
+        require(success, "setMinDifficulty call failed");
+    }
+
+    function setMaxDifficulty(uint64 maxDifficulty) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMaxDifficulty.selector, netuid, maxDifficulty)
+        );
+        require(success, "setMaxDifficulty call failed");
+    }
+
+    function setWeightsVersionKey(uint64 weightsVersionKey) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setWeightsVersionKey.selector, netuid, weightsVersionKey)
+        );
+        require(success, "setWeightsVersionKey call failed");
+    }
+
+    function setWeightsSetRateLimit(uint64 weightsSetRateLimit) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setWeightsSetRateLimit.selector, netuid, weightsSetRateLimit)
+        );
+        require(success, "setWeightsSetRateLimit call failed");
+    }
+
+    function setAdjustmentAlpha(uint64 adjustmentAlpha) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setAdjustmentAlpha.selector, netuid, adjustmentAlpha)
+        );
+        require(success, "setAdjustmentAlpha call failed");
+    }
+
+    function setMaxWeightLimit(uint16 maxWeightLimit) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMaxWeightLimit.selector, netuid, maxWeightLimit)
+        );
+        require(success, "setMaxWeightLimit call failed");
+    }
+
+    function setImmunityPeriod(uint64 immunityPeriod) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setImmunityPeriod.selector, netuid, immunityPeriod)
+        );
+        require(success, "setImmunityPeriod call failed");
+    }
+
+    function setMinAllowedWeights(uint16 minAllowedWeights) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMinAllowedWeights.selector, netuid, minAllowedWeights)
+        );
+        require(success, "setMinAllowedWeights call failed");
+    }
+
+    function setRho(uint16 rho) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setRho.selector, netuid, rho)
+        );
+        require(success, "setRho call failed");
+    }
+
+    function setActivityCutoff(uint16 activityCutoff) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setActivityCutoff.selector, netuid, activityCutoff)
+        );
+        require(success, "setActivityCutoff call failed");
+    }
+
+    function setNetworkRegistrationAllowed(bool networkRegistrationAllowed) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setNetworkRegistrationAllowed.selector, netuid, networkRegistrationAllowed)
+        );
+        require(success, "setNetworkRegistrationAllowed call failed");
+    }
+
+    function setNetworkPowRegistrationAllowed(bool networkPowRegistrationAllowed) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setNetworkPowRegistrationAllowed.selector, netuid, networkPowRegistrationAllowed)
+        );
+        require(success, "setNetworkPowRegistrationAllowed call failed");
+    }
+
+    function setMinBurn(uint64 minBurn) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMinBurn.selector, netuid, minBurn)
+        );
+        require(success, "setMinBurn call failed");
+    }
+
+    function setMaxBurn(uint64 maxBurn) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setMaxBurn.selector, netuid, maxBurn)
+        );
+        require(success, "setMaxBurn call failed");
+    }
+
+    function setDifficulty(uint64 difficulty) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setDifficulty.selector, netuid, difficulty)
+        );
+        require(success, "setDifficulty call failed");
+    }
+
+    function setBondsMovingAverage(uint64 bondsMovingAverage) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setBondsMovingAverage.selector, netuid, bondsMovingAverage)
+        );
+        require(success, "setBondsMovingAverage call failed");
+    }
+
+    function setCommitRevealWeightsEnabled(bool commitRevealWeightsEnabled) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setCommitRevealWeightsEnabled.selector, netuid, commitRevealWeightsEnabled)
+        );
+        require(success, "setCommitRevealWeightsEnabled call failed");
+    }
+
+    function setLiquidAlphaEnabled(bool liquidAlphaEnabled) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setLiquidAlphaEnabled.selector, netuid, liquidAlphaEnabled)
+        );
+        require(success, "setLiquidAlphaEnabled call failed");
+    }
+
+    function setAlphaValues(
+        uint16 alphaLow,
+        uint16 alphaHigh
+    ) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setAlphaValues.selector, netuid, alphaLow, alphaHigh)
+        );
+        require(success, "setAlphaValues call failed");
+    }
+
+    function setCommitRevealWeightsInterval(uint64 commitRevealWeightsInterval) external onlyDeveloper() {
+        (bool success, ) = ISUBNET_ADDRESS.call{gas: gasleft()}(
+            abi.encodeWithSelector(subnet.setCommitRevealWeightsInterval.selector, netuid, commitRevealWeightsInterval)
+        );
+        require(success, "setCommitRevealWeightsInterval call failed");
     }
 
     // Allows registrator and developer to set hotkeys and coldkeys of their validators

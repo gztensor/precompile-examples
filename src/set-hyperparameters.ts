@@ -12,9 +12,15 @@ async function main() {
   // Registrator signer (can be anyone)
   const snmgrDev = new ethers.Contract(snmgrAddress, abi, developer);
 
+  // Set Kappa
   const tx1 = await snmgrDev.setKappa(54321);
   await tx1.wait();
   console.log("Transaction confirmed:", tx1.hash);
+
+  // Enable commit-reveal
+  const tx2 = await snmgrDev.setCommitRevealWeightsEnabled(true);
+  await tx2.wait();
+  console.log("Transaction confirmed:", tx2.hash);
 
   console.log("Finished");
 }

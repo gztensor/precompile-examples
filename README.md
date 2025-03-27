@@ -99,3 +99,8 @@ npx hardhat run src/set-hyperparameters.ts
 ```
 - Verify Kappa using Polkadot AppsUI
 
+
+## Production setup notes
+
+- Change blockTime in deploy-subnet-manager.ts script
+- Set subnet identity parameter in deploy-subnet-manager.ts script

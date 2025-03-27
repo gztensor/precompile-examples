@@ -7,6 +7,13 @@ const { Keyring } = require('@polkadot/api');
 // Make sure this hotkey doesn't exist on the network, otherwise creation tx will fail
 const subnetOwnerHotkey = "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL"; // Ferdie
 const subnetOwnerColdkeySeed = "//Alice";
+const subnetName = "TestSubnet";
+const githubRepo = "https://github.com/testsubnet";
+const subnetContact = "1234567890";
+const subnetUrl = "https://example.com";
+const discord = "@discord_name";
+const description = "Subnet Description";
+const additional = "Any additional info";
 
 const blockTime = 1000;
 
@@ -98,7 +105,17 @@ async function createSubnet(api: any, snmgr: any, ss58Mirror: any, registrator: 
   // Call createSubnet
   const subnetOwnerPublicKey = u8aToHex(decodeAddress(subnetOwnerHotkey));
   console.log(`Registering subnet...`);
-  await snmgr.createSubnet(subnetOwnerPublicKey, {caller: registrator, gasLimit: 3_000_000});
+  await snmgr.createSubnet(
+    subnetOwnerPublicKey,
+    subnetName,
+    githubRepo,
+    subnetContact,
+    subnetUrl,
+    discord,
+    description,
+    additional,
+    {caller: registrator, gasLimit: 3_000_000}
+  );
   await sleep(blockTime);
   console.log(`Subnet created`);
   const snOwnerCheck = await snmgr.subnetOwnerHotkey();
