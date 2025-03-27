@@ -287,8 +287,7 @@ contract SubnetManager {
         uint256 developerShare;
         
         // 420_000 is 2% of 21M
-        // if (registratorAccumulatedStake < 420_000_000_000_000) {
-        if (registratorAccumulatedStake < 100_000_000_000) {
+        if (registratorAccumulatedStake < 420_000_000_000_000) {
             registratorShare = pendingStake / 2; // 50% / 50%
         } else {
             registratorShare = pendingStake / 5; // 20% / 80%
