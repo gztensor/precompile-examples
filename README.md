@@ -57,3 +57,45 @@ Important: It will become a neuron on the subnet with uid 0, so it is important 
 ```
 npx hardhat run src/deploy-subnet-manager.ts
 ```
+
+6. Register validators
+
+- Set netuid in src/register-validators.ts
+- Fund validator coldkeys (Bob and Charlie for testing). Then execute
+```
+npx hardhat run src/register-validators.ts
+```
+
+7. Set registrator and developer hotkeys in smart contract
+
+- Set contract address in setup-keys.ts
+- Set public keys for validaotrs in setup-keys.ts and run
+```
+npx hardhat run src/setup-keys.ts
+```
+
+8. Wait until subnet owner emissions accumulate on the contract address and call distributeRewards in the contract
+
+- The deploy script outputs the contract mirror address like this:
+```
+SS58 Mirror address of this contract: 5GBDecCfCQHfuaf16Gb9V13qwFiKJLGnfmoPm3EG2E2zj89x
+```
+This address will be the subnet owner coldkey.
+The subnet owner hotkey is set in step 4 (It is Dave for testing: 5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL)
+The hotkey can be monitored for subnet owner stake (which will be transferred by the distributeRewards method).
+
+In order to distribute rewards:
+
+- Fill the contract address in distribute-rewards.ts and run
+```
+npx hardhat run src/distribute-rewards.ts
+```
+
+9. Setting hyperparameters (developer only)
+
+- Run
+```
+npx hardhat run src/set-hyperparameters.ts
+```
+- Verify Kappa using Polkadot AppsUI
+

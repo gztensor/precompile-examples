@@ -5,8 +5,10 @@ import { createApi } from "./setup";
 const { Keyring } = require('@polkadot/api');
 
 // Make sure this hotkey doesn't exist on the network, otherwise creation tx will fail
-const subnetOwnerHotkey = "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL";
+const subnetOwnerHotkey = "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL"; // Ferdie
+const subnetOwnerColdkeySeed = "//Alice";
 
+const blockTime = 1000;
 
 /**
  * This function deploys the SubnetManager contract, then it configures it 
@@ -48,7 +50,7 @@ async function main() {
   const ss58MirrorPubKeyHex = u8aToHex(ss58MirrorPubKey);
   console.log(`SS58 Mirror public key: ${ss58MirrorPubKeyHex}`);
   await snmgr.setThisSs58PublicKey(ss58MirrorPubKeyHex, { caller: registrator, gasLimit: 5_000_000 });
-  await sleep(12000);
+  await sleep(blockTime);
   const checkPubKey = await snmgr.thisSs58PublicKey();
   console.log(`Mirror public key set (${checkPubKey})`);
 
@@ -58,9 +60,13 @@ async function main() {
   // Set netuid in the contract
   console.log(`Setting netuid in the contract...`);
   await snmgr.setSubnetId(newNetuid, { caller: registrator, gasLimit: 5_000_000 });
-  await sleep(12000);
+  await sleep(blockTime);
   const checkNetuid = await snmgr.netuid();
   console.log(`Netuid set (${checkNetuid})`);
+
+  // Register registrator's validator
+
+  // Set registrator and developer validators' keys
 
   console.log("Finished");
 }
@@ -72,9 +78,9 @@ async function createSubnet(api: any, snmgr: any, ss58Mirror: any, registrator: 
   console.log(lockCost.toFixed(0));
   const tx = api.tx.balances.transferKeepAlive(ss58Mirror, lockCost.toFixed(0));
   const keyring = new Keyring({ type: 'sr25519' });
-  const alice = keyring.addFromUri("//Alice");
-  await sendTransaction(api, tx, alice);
-  await sleep(12000);
+  const snOwner = keyring.addFromUri(subnetOwnerColdkeySeed);
+  await sendTransaction(api, tx, snOwner);
+  await sleep(blockTime);
 
   // Get the existing netuids
   let i = 0;
@@ -93,7 +99,7 @@ async function createSubnet(api: any, snmgr: any, ss58Mirror: any, registrator: 
   const subnetOwnerPublicKey = u8aToHex(decodeAddress(subnetOwnerHotkey));
   console.log(`Registering subnet...`);
   await snmgr.createSubnet(subnetOwnerPublicKey, {caller: registrator, gasLimit: 3_000_000});
-  await sleep(12000);
+  await sleep(blockTime);
   console.log(`Subnet created`);
   const snOwnerCheck = await snmgr.subnetOwnerHotkey();
   console.log(`Subnet owner hotkey: ${snOwnerCheck}`);
@@ -196,13 +202,8 @@ function sendTransaction(api: any, call: any, signer: any) {
   });
 }
 
-
-
 function sleep(ms: any) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main().catch(console.error).finally(() => process.exit());
