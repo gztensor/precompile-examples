@@ -275,6 +275,8 @@ contract SubnetManager {
     }
 
     // Reward distribution logic
+    // WARNING: If you're making changes to this contract, make sure that transfers are enabled.
+    // The toggleTransfers precompile method can be used to enable/disable them. 
     function distributeRewards() external {
         require(thisSs58PublicKey != 0, "Public key is not set");
         require(registratorStakingColdkey != 0 && developerStakingColdkey != 0, "Coldkeys are not set");
